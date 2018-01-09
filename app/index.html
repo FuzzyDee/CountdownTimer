@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>todo react redux</title>
+  <style>
+    html, body {
+      height: 100%;
+    }
+
+    #main {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main"></div>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.4.1/react-redux.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.3.1/redux.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+
+  <script type="text/babel">
+  const TodoList = ({ todos = [], onRemove }) => {
+    const orderedToDos = todos.sort((a,b) => {
+      return b.id - a.id;
+    })
+
+    return (
+        <div data-automation="app">
+          <img src="http://via.placeholder.com/350x150" data-automation="title-img" />
+          <h2>ToDos</h2>
+          <TodoInput />
+          <ol data-automation="todo-list">
+            { orderedToDos.map(todo =>
+              <Todo { ...todo } onClick={() => onRemove(todo.id)} />
+            ) }
+          </ol>
+        </div>
+    )
+  }
+
+  const Todo = ({ text, onClick }) => {
+    return (
+        <li data-automation="todo">
+          <span data-automation="text">{text}</span>
+          <small data-automation="remove" onClick={ onClick }>Remove</small>
+        </li>
+    )
+  }
+
+
+  // Constant
+  const ADD_TODO = 'ADD_TODO';
+  const DEL_TODO = 'DEL_TODO';
+
+  // Reducers
+  const todo = (state = {}, action) => {
+
+    switch(action.type) {
+      case ADD_TODO:
+        return {
+          id: action.id,
+          text: action.text
+        }
+        default:
+          return state;
+    }
+  }
+
+  const todos = (state = [], action) => {
+    switch(action.type) {
+      case ADD_TODO:
+        return [
+          ...state,
+          todo({} ,action)
+        ]
+
+      case DEL_TODO:
+        return state.filter(todo => todo.id !== action.id)
+
+      default:
+          return state
+    }
+  }
+
+  // Action
+  let id = 10;
+  const addTodo = (text) => {
+    return {
+      type: ADD_TODO,
+      id: id++,
+      text
+    }
+  }
+
+  const delTodo = (todo_id) => {
+    return {
+      type: DEL_TODO,
+      id: todo_id
+    }
+  }
+
+  // Containers
+  let TodoInput = ({ dispatch }) => {
+    let input;
+
+    const onSubmit = (e) => {
+      e.preventDefault();
+      dispatch(addTodo(input.value));
+      input.value = '';
+    }
+
+    return (
+      <form data-automation="input-form"
+        onSubmit={onSubmit}>
+        <input type="text" placeholder='add item' data-automation="input" ref={ text => input = text } />
+      </form>
+    )
+  };
+
+  TodoInput = ReactRedux.connect()(TodoInput)
+
+  const mapStateToProps_list = (state) => {
+    return {
+      todos: state
+    }
+  }
+
+  const mapDispatchToProps_list = (dispatch) => {
+    return {
+      onRemove: (id) => { dispatch(delTodo(id)) }
+    }
+  }
+
+  const NewList = ReactRedux.connect(
+    mapStateToProps_list,
+    mapDispatchToProps_list
+  )(TodoList);
+
+  // Store
+  const store = Redux.createStore(todos);
+
+  ReactDOM.render (
+    <ReactRedux.Provider store={ store }>
+      <div>
+        <NewList/>
+      </div>
+    </ReactRedux.Provider>
+    ,
+    document.getElementById('main')
+  );
+
+  </script>
+
+</body>
+</html>
