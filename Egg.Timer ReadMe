@@ -1,0 +1,16 @@
+Task To provide test coverage for a small count down timer web application. You can view browse the application by navigating to http://e.ggtimer.com.
+
+Test coverage tasks
+
+Test that:
+
+Step 1: Please visit the site url and make sure the page load is complete; then enter 25 seconds and click on the Go button to start the counter. Step 2: Wait for the counter to start counting down from the period specified in the home page and verify that the countdStep 1: Please visit the site url and make sure the page load is complete; then enter 25 seconds and click on the Go button to start the counter. Step 2: Wait for the counter to start counting down from the period specified in the home page and verify that the countdown is actually happening every second and that the remaining time decreases in one-second increments. Step 1: Please visit the site url and make sure the page load is complete; then enter 25 seconds and click on the Go button to start the counter. Step 2: Wait for the counter to start counting down from the period specified in the home page and verify that the countdown is actually happening every second and that the remaining time decreases in one-second increments. own is actually happening every second and that the remaining time decreases in one-second increments. 
+
+node@8.5.0 (https://nodejs.org/en/download/)
+Setup
+
+checkout project
+npm install
+Running project
+
+npm test.
